@@ -1,0 +1,1589 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WfdbCsharpLib</name>
+    </assembly>
+    <members>
+        <member name="T:WfdbCsharpWrapper.Annotation">
+            <summary>
+            Describes one or more attributes of one or more signals at a given
+            time.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Annotation.Time">
+            <summary>
+            Gets or sets annotation time, in sample intervals from the beginning of the record.
+            <remarks>
+            The times of beat annotations in the ‘atr’ files for the MIT DB generally coincide with
+            the R-wave peak in signal 0; for the AHA DB, they generally coincide with the
+            PQ-junction.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Annotation.Type">
+            <summary>
+            Gets or sets annotation code, an integer between 1 and <see cref="P:WfdbCsharpWrapper.AnnotationCode.ACMax"/>. 
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Annotation.SubType">
+            <summary>
+            Gets or sets annotation subtype.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Annotation.ChannelNumber">
+            <summary>
+            Gets or sets the channel number.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Annotation.AnnotatorNumber">
+            <summary>
+            Gets or sets the annotator number.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Annotation.Aux">
+            <summary>
+            Gets or sets auxiliary information.
+            </summary>
+        </member>
+        <member name="T:WfdbCsharpWrapper.AnnotationCode">
+            <summary>
+            Annotation Codes.
+            <remarks>
+            The annotation codes are the predefined values of the <see cref="P:WfdbCsharpWrapper.Annotation.Type"/>
+            field. Other values in the range of 1 to <see cref="P:WfdbCsharpWrapper.AnnotationCode.ACMax"/> are legal but do not have preassigned meanings. The constant
+            <see cref="P:WfdbCsharpWrapper.AnnotationCode.NotQrs"/>, is not a legal value for <see cref="P:WfdbCsharpWrapper.Annotation.Type"/>, but is a
+            possible output of macros implemented in this class.
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:WfdbCsharpWrapper.AnnotationCode.#ctor(System.Byte)">
+            <summary>
+            Creates a new instance from <see cref="T:WfdbCsharpWrapper.AnnotationCode"/>
+            </summary>
+            <param name="value">Annotation code's value.</param>
+        </member>
+        <member name="M:WfdbCsharpWrapper.AnnotationCode.MapAhaToMit(System.Char)">
+            <summary>
+            Maps an AHA annotation code into an MIT annotation code (one of the
+            set {<see cref="P:WfdbCsharpWrapper.AnnotationCode.Normal"/>, <see cref="P:WfdbCsharpWrapper.AnnotationCode.Pvc"/>, <see cref="P:WfdbCsharpWrapper.AnnotationCode.Fusion"/>, <see cref="P:WfdbCsharpWrapper.AnnotationCode.ROnT"/>, <see cref="P:WfdbCsharpWrapper.AnnotationCode.Vesc"/>, 
+            <see cref="P:WfdbCsharpWrapper.AnnotationCode.Pace"/>, <see cref="P:WfdbCsharpWrapper.AnnotationCode.Unknown"/>, <see cref="P:WfdbCsharpWrapper.AnnotationCode.VfOn"/>, <see cref="P:WfdbCsharpWrapper.AnnotationCode.VfOff"/>, <see cref="P:WfdbCsharpWrapper.AnnotationCode.Noise"/>,
+            <see cref="P:WfdbCsharpWrapper.AnnotationCode.Note"/>}), or <see cref="P:WfdbCsharpWrapper.AnnotationCode.NotQrs"/>
+            </summary>
+            <param name="ahaCode">AHA Annotation code.</param>
+            <returns>Corresponding MIT Code</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.AnnotationCode.ToAha(WfdbCsharpWrapper.AnnotationCode)">
+            <summary>
+             Maps this MIT annotation code into an AHA annotation code.
+            </summary>
+            <param name="mitSubCode">
+            MIT annotation sub code
+            <remarks>
+            This parameter is significant only if mitCode is <see cref="P:WfdbCsharpWrapper.AnnotationCode.Noise"/>)
+            </remarks>
+            </param>
+            <returns>The corresponding AHA annotation code</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.AnnotationCode.ToAha(System.Int32)">
+            <summary>
+             Maps this MIT annotation code into an AHA annotation code.
+            </summary>
+            <param name="mitSubCode">
+            MIT annotation sub code
+            <remarks>
+            This parameter is significant only if mitCode is <see cref="P:WfdbCsharpWrapper.AnnotationCode.Noise"/>)
+            This overloaded version is used when mitSubCode is -1.
+            </remarks>
+            </param>
+            <returns>The corresponding AHA annotation code</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.AnnotationCode.Parse(System.String)">
+            <summary>
+            Converts a string into a valid annotation code if possible.
+            </summary>
+            <param name="code">Annotation code's string.</param>
+            <returns>Annotation Code.</returns>
+            <remarks>
+            Illegal strings are translated into <see cref="P:WfdbCsharpWrapper.AnnotationCode.NotQrs"/>. Input strings
+            for Parse and ParseEcgString should match those returned by <see cref="P:WfdbCsharpWrapper.AnnotationCode.String"/> and <see cref="P:WfdbCsharpWrapper.AnnotationCode.EcgString"/> respectively.
+            </remarks>
+        </member>
+        <member name="M:WfdbCsharpWrapper.AnnotationCode.ParseEcgString(System.String)">
+            <summary>
+            Converts a string into a valid annotation code if possible.
+            </summary>
+            <param name="ecgString">Annotation code's string.</param>
+            <returns>Annotation Code.</returns>
+            <remarks>
+            Illegal strings are translated into <see cref="P:WfdbCsharpWrapper.AnnotationCode.NotQrs"/>. Input strings
+            for Parse and ParseEcgString should match those returned by <see cref="P:WfdbCsharpWrapper.AnnotationCode.String"/> and <see cref="P:WfdbCsharpWrapper.AnnotationCode.EcgString"/> respectively.
+            </remarks>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.IsAnnotation">
+            <summary>
+            Gets a value indicating whether or not a given code is a legal annotation code.
+            </summary>
+            <returns>True if code is a legal annotation code, false otherwise.</returns>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.AnnotationCodes">
+            <summary>
+            Gets the list of supported annotation codes.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Value">
+            <summary>
+            Gets the integer value of this annotation code.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.String">
+            <summary>
+            Converts the specified annotation code into a string.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.EcgString">
+            <summary>
+            Gets or sets the string representation of this annotation code.
+            </summary>
+            <remarks>
+            The strings returned by EcgString are usually
+            the same as those returned by <see cref="P:WfdbCsharpWrapper.AnnotationCode.String"/>, but they can be modified only using this property's setter.
+            </remarks>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Description">
+            <summary>
+            Gets or sets the description of the this annotation code.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.IsQrs">
+            <summary>
+            Gets or sets a value indicating whether or not this annotation code denotes a QRS complex.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Map1">
+            <summary>
+            Gets or sets the resulting annotation code using <see cref="M:WfdbCsharpWrapper.PInvoke.wfdb_map1(System.Int32)"/> macro.
+            The resulting annotation code is one of {<see cref="P:WfdbCsharpWrapper.AnnotationCode.NotQrs"/>, <see cref="P:WfdbCsharpWrapper.AnnotationCode.Normal"/>, 
+            <see cref="P:WfdbCsharpWrapper.AnnotationCode.Pvc"/>, <see cref="P:WfdbCsharpWrapper.AnnotationCode.Fusion"/>, <see cref="P:WfdbCsharpWrapper.AnnotationCode.Learn"/>}
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Map2">
+            <summary>
+            Gets or sets the resulting annotation code using <see cref="M:WfdbCsharpWrapper.PInvoke.wfdb_map1(System.Int32)"/> macro.
+            The resulting annotation code is one of the set {<see cref="P:WfdbCsharpWrapper.AnnotationCode.NotQrs"/>, 
+            <see cref="P:WfdbCsharpWrapper.AnnotationCode.Normal"/>, <see cref="P:WfdbCsharpWrapper.AnnotationCode.Pvc"/>, <see cref="P:WfdbCsharpWrapper.AnnotationCode.Fusion"/>, <see cref="P:WfdbCsharpWrapper.AnnotationCode.Learn"/>}
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.AnnotationPos">
+            <summary>
+            Gets or sets the appropriate position code for this annotation code.
+            <remarks>
+            This macro was first introduced in WFDB library version 6.0.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.NotQrs">
+            <summary>
+            Not Qrs, no meaning but legal.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Normal">
+            <summary>
+            Normal beat 'N'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Lbbb">
+            <summary>
+            Left bundle branch block beat 'L'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Rbbb">
+            <summary>
+            Right bundle branch block beat 'R'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Bbb">
+            <summary>
+            Bundle branch block beat (unspecified) 'B'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Apc">
+            <summary>
+            Atrial premature beat 'A'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Aberr">
+            <summary>
+            Aberrated atrial premature beat 'a'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Npc">
+            <summary>
+            Nodal (junctional) premature beat 'J'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Svpb">
+            <summary>
+            Supraventricular premature or ectopic beat (atrial or nodal) 'S'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Pvc">
+            <summary>
+            Premature ventricular contraction 'V'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.ROnT">
+            <summary>
+            R-on-T premature ventricular contraction 'r'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Fusion">
+            <summary>
+            Fusion of ventricular and normal beat 'F'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Aesc">
+            <summary>
+            Atrial escape beat 'e'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Nesc">
+            <summary>
+            Nodal (junctional) escape beat 'j'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Svesc">
+            <summary>
+            Supraventricular escape beat (atrial or nodal) 'n'.
+            <remarks>
+            This code was first introduced in WFDB library version 4.0.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Vesc">
+            <summary>
+            Ventricular escape beat 'E'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Pace">
+            <summary>
+            Paced beat '/'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Pfus">
+            <summary>
+            Fusion of paced and normal beat 'f'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Unknown">
+            <summary>
+            Unclassifiable beat 'Q'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Learn">
+            <summary>
+            Beat not classified during learning '?'.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.VfOn">
+            <summary>
+            Start of ventricular flutter/fibrillation '['
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.FLWav">
+            <summary>
+            Ventricular flutter wave '!'
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.VfOff">
+            <summary>
+            End of ventricular flutter/fibrillation ']'
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.NApc">
+            <summary>
+            Non-conducted P-wave (blocked APC) 'x'
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.WFOn">
+            <summary>
+            Waveform onset '('
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.WFOff">
+            <summary>
+            Waveform end ')'
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.PWave">
+            <summary>
+            Peak of P-wave 'p'
+            <remarks>
+            This code was first introduced in DB library version
+            8.3. The ‘p’ mnemonic now assigned to <see cref="P:WfdbCsharpWrapper.AnnotationCode.PWave"/> was formerly assigned to <see cref="P:WfdbCsharpWrapper.AnnotationCode.NApc"/>.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.TWave">
+            <summary>
+            Peak of T-wave 't'
+            <remarks>
+            This code was first introduced in DB library version
+            8.3. The ‘t’ mnemonic now assigned to <see cref="P:WfdbCsharpWrapper.AnnotationCode.TWave"/> was formerly assigned to <see cref="P:WfdbCsharpWrapper.AnnotationCode.TCh"/>.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.UWave">
+            <summary>
+            Peak of U-wave 'u'
+            <remarks>
+            This code was first introduced in DB library version 8.3. 
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.PQ">
+            <summary>
+            PQ junction '‘'.
+            <remarks>
+            The obsolete code PQ (designating the PQ junction) is still defined , but is identical to <see cref="P:WfdbCsharpWrapper.AnnotationCode.WFOn"/>.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.JPt">
+            <summary>
+            J-point '’'
+            <remarks>
+            The obsolete code JPt (designating the J-point) is still defined , but is identical to <see cref="P:WfdbCsharpWrapper.AnnotationCode.WFOff"/>.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.PaceSP">
+            <summary>
+            (Non-captured) pacemaker artifact '^'
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Arfct">
+            <summary>
+            Isolated QRS-like artifact '|'
+            <remarks>
+            In MIT and ESC DB ‘atr’ files, each non-zero bit in the subtyp field indicates that
+            the corresponding signal contains noise (the least significant bit corresponds to signal
+            0).
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Noise">
+            <summary>
+            Change in signal quality '~'
+            <remarks>
+            In MIT and ESC DB ‘atr’ files, each non-zero bit in the subtyp field indicates that
+            the corresponding signal contains noise (the least significant bit corresponds to signal
+            0).
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Rhythm">
+            <summary>
+            Rhythm change '+'
+            <remarks>
+            The aux field contains an ASCII string (with prefixed byte count) describing the
+            rhythm, ST segment, T-wave change, measurement, or the nature of the comment.
+            By convention, the character that follows the byte count in the aux field of a RHYTHM
+            annotation is ‘(’. See the MIT-BIH Arrhythmia Database Directory for a list of rhythm
+            annotation strings.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.STCh">
+            <summary>
+            ST segment change 's'
+            <remarks>
+            - This code was first introduced in WFDB library version 4.0.
+            - The aux field contains an ASCII string (with prefixed byte count) describing the
+            rhythm, ST segment, T-wave change, measurement, or the nature of the comment.
+            By convention, the character that follows the byte count in the aux field of a <see cref="P:WfdbCsharpWrapper.AnnotationCode.Rhythm"/>
+            annotation is ‘(’. See the MIT-BIH Arrhythmia Database Directory for a list of rhythm
+            annotation strings.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.TCh">
+            <summary>
+            T-wave change 'T'
+            <remarks>
+            - This code was first introduced in WFDB library version 4.0.
+            - The aux field contains an ASCII string (with prefixed byte count) describing the
+            rhythm, ST segment, T-wave change, measurement, or the nature of the comment.
+            By convention, the character that follows the byte count in the aux field of a <see cref="P:WfdbCsharpWrapper.AnnotationCode.Rhythm"/>
+            annotation is ‘(’. See the MIT-BIH Arrhythmia Database Directory for a list of rhythm
+            annotation strings.
+            - the ‘t’ mnemonic now assigned to TWAVE was formerly assigned to TCH.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Systole">
+            <summary>
+            Systole '*'
+            <remarks>
+            This code was first introduced in WFDB library version 7.0.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Diastole">
+            <summary>
+            Diastole 'D'
+            <remarks>
+            - This code was first introduced in WFDB library version 7.0.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Measure">
+            <summary>
+            Measurement annotation '='
+            <remarks>
+            - This code was first introduced in WFDB library version 7.0.
+            - The aux field contains an ASCII string (with prefixed byte count) describing the
+            rhythm, ST segment, T-wave change, measurement, or the nature of the comment.
+            By convention, the character that follows the byte count in the aux field of a <see cref="P:WfdbCsharpWrapper.AnnotationCode.Rhythm"/>
+            annotation is ‘(’. See the MIT-BIH Arrhythmia Database Directory for a list of rhythm
+            annotation strings.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Note">
+            <summary>
+            Comment annotation '"'
+            <remarks>
+            The aux field contains an ASCII string (with prefixed byte count) describing the
+            rhythm, ST segment, T-wave change, measurement, or the nature of the comment.
+            By convention, the character that follows the byte count in the aux field of a <see cref="P:WfdbCsharpWrapper.AnnotationCode.Rhythm"/>
+            annotation is ‘(’. See the MIT-BIH Arrhythmia Database Directory for a list of rhythm
+            annotation strings.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Link">
+            <summary>
+            Link to external data '@'.
+            <remarks>
+            The <see cref="P:WfdbCsharpWrapper.AnnotationCode.Link"/>  code was first introduced in WFDB library version 9.6. The aux field
+            of a LINK annotation contains a URL (a uniform resource locator, in the form
+            ‘http://machine.name/some/data’, suitable for passing to a Web browser such as
+            Netscape or Mosaic). LINK annotations may be used to associate extended text,
+            images, or other data with an annotation file. If the aux field contains any whitespace,
+            text following the first whitespace is taken as descriptive text to be displayed by a
+            WFDB browser such as WAVE.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.ACMax">
+            <summary>
+            Value of largest valid annotation code.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Reserved42">
+            <summary>
+            User defined.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Reserved43">
+            <summary>
+            User defined
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Reserved44">
+            <summary>
+            User defined
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Reserved45">
+            <summary>
+            User defined
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Reserved46">
+            <summary>
+            User defined
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Reserved47">
+            <summary>
+            User defined
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.AnnotationCode.Reserved48">
+            <summary>
+            User defined
+            </summary>
+        </member>
+        <member name="T:WfdbCsharpWrapper.AnnotationPos">
+            <summary>
+            These may be used by applications which plot
+            signals and annotations to determine where to print annotation mnemonics.
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.AnnotationPos.APUndef">
+            <summary>
+            Undefined annotation types 
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.AnnotationPos.APStd">
+            <summary>
+            Standard position 
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.AnnotationPos.APHigh">
+            <summary>
+            A level above <see cref="F:WfdbCsharpWrapper.AnnotationPos.APStd"/>
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.AnnotationPos.APLow">
+            <summary>
+            A level below <see cref="F:WfdbCsharpWrapper.AnnotationPos.APStd"/>
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.AnnotationPos.APAtt">
+            <summary>
+            Attached to the signal specified by `chan' 
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.AnnotationPos.APAHigh">
+            <summary>
+            A level above <see cref="F:WfdbCsharpWrapper.AnnotationPos.APAtt"/>
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.AnnotationPos.APALow">
+            <summary>
+            A level below <see cref="F:WfdbCsharpWrapper.AnnotationPos.APAtt"/>
+            </summary>
+        </member>
+        <member name="T:WfdbCsharpWrapper.Annotator">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Annotator.Name">
+            <summary>
+            Gets or sets the annotator's name.
+            <remarks>
+            The name ‘atr’ is reserved for a reference annotation
+            file supplied by the creator of the database record to document its contents as
+            accurately and thoroughly as possible. You may use other annotator names to
+            identify annotation files that you create; unless there are compelling reasons not
+            to do so, follow the convention that the annotator name is the name of the file’s
+            creator (a program or a person). To avoid confusion, do not use ‘dat’, ‘datan’,
+            ‘dn’, or ‘hea’ (all of which are commonly used as parts of WFDB file names) as
+            annotator names. The special name ‘-’ refers to the standard input or output.
+            Other annotator names may contain upper- or lower-case letters, digits, and
+            underscores. Annotation files are normally created in the current directory and
+            found in any of the directories in the database path.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Annotator.Stat">
+            <summary>
+            Gets or sets the file type/access code. 
+            <remarks>
+            Usually, Stat is either <see cref="F:WfdbCsharpWrapper.Stat.Read"/> or 
+            <see cref="F:WfdbCsharpWrapper.Stat.Write"/> to specify standard (“WFDB format”) annotation files to be read by getann
+            or to be written by putann. Both MIT DB and AHA DB annotation files can
+            be (and generally are) stored in WFDB format. An AHA-format annotation file
+            can be read by getann or written by putann if the Stat field is set to <see cref="F:WfdbCsharpWrapper.Stat.AhaRead"/>
+            or <see cref="F:WfdbCsharpWrapper.Stat.AhaWrite"/> before calling annopen or wfdbinit.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Annotator.Number">
+            <summary>
+            Gets or sets an unsigned integer type used to represent annotator numbers.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Annotator.IsEof">
+            <summary>
+            Gets a value indicating whether the end of the annotation file has been reached or not.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Annotator.IsOpen">
+            <summary>
+            Returns a value indicating whether this annotator is open or not.
+            </summary>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Annotator.Open(System.String,System.Boolean)">
+            <summary>
+            Opens the annotator associated with the specified record for read access.
+            </summary>
+            <param name="record">The name of the record to be opened.</param>
+            <param name="keepOldOpen">Specifies whether or not you want to keep the already opened annotators in memory.</param>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Annotator.Open(System.String)">
+            <summary>
+            Opens the current annotator associated with the specified record.
+            </summary>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Annotator.Seek(WfdbCsharpWrapper.Time)">
+            <summary>
+            Moves the reading pointer within the Annotator file to the specified position.
+            </summary>
+            <param name="t">Seek position.</param>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Annotator.Seek(System.Int32)">
+            <summary>
+            Moves the reading pointer by <paramref name="count"/> annotations starting from the current position.
+            </summary>
+            <param name="count">Number of annotations to skip.</param>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Annotator.Close">
+            <summary>
+            Closes the current annotator.
+            </summary>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Annotator.ReadNext">
+            <summary>
+            Returns the current annotation and moves the reading pointer automatically to the next position.
+            </summary>
+            <returns>The current annotation.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Annotator.ReadNext(System.Int32)">
+            <summary>
+            Returns the available <paramref name="count"/> annotations starting from the current position.
+            </summary>
+            <param name="count">Number of annotations to be read</param>
+            <returns>A list containing <paramref name="count"/> annotations available starting from the current position.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Annotator.ReadNext(WfdbCsharpWrapper.Time,WfdbCsharpWrapper.Time)">
+            <summary>
+            Gets the available annotations within a time range.
+            </summary>
+            <param name="from">Start position.</param>
+            <param name="duration">Range length.</param>
+            <returns>A list containing the avaialble annotations between <paramref name="from"/> and <paramref name="from"/>+<paramref name="duration"/> </returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Annotator.ReadAll">
+            <summary>
+            Returns all available annotations in the current annotator file.
+            </summary>
+            <returns>A list containing all available annotations in the current annotator file.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Annotator.CloseAll">
+            <summary>
+            Closes all open annotators.
+            </summary>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Annotator.OpenAll(WfdbCsharpWrapper.Annotator[],System.String)">
+            <summary>
+            Opens all available annotators associated with the specified record file.
+            </summary>
+            <param name="annotators">An array holding the returned annotator objects.</param>
+            <param name="record">Record's name.</param>
+        </member>
+        <member name="T:WfdbCsharpWrapper.CalibrationInfo">
+            <summary>
+            Holds calibration specifications for signals of a given type.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.CalibrationInfo.SignalType">
+            <summary>
+            Gets or sets a string (without embedded tabs or newlines) that describes the type(s) of signals to which the calibration specifications apply.
+            <remarks>
+            Usually, <see cref="P:WfdbCsharpWrapper.CalibrationInfo.SignalType"/> is an exact match to (or a prefix of) the <see cref="P:WfdbCsharpWrapper.Signal.Description"/> field of the
+            <see cref="T:WfdbCsharpWrapper.Signal"/> object that describes a matching signal.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.CalibrationInfo.Units">
+            <summary>
+            Gets or sets a string without embedded whitespace that specifies the physical units 
+            of signals to which the calibration specifications apply. 
+            <remarks>
+            Usually, the units field of a 
+            <see cref="T:WfdbCsharpWrapper.CalibrationInfo"/> structure must exactly match
+            the <see cref="P:WfdbCsharpWrapper.Signal.Units"/> field of the <see cref="T:WfdbCsharpWrapper.Signal"/> structure that describes a matching signal.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.CalibrationInfo.Scale">
+            <summary>
+            Gets or sets the customary plotting scale, in physical units per centimeter. 
+            <remarks>
+            WFDB applications that produce graphical output may use scale as a default. Except
+            in unusual circumstances, signals of different types should be plotted at equal
+            multiples of their respective scales.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.CalibrationInfo.Low">
+            <summary>
+            Gets or sets the value (in physical units) corresponding to the low level of a calibration
+            pulse. 
+            <remarks>
+            If the signal is AC-coupled, low is zero, and high is the pulse amplitude.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.CalibrationInfo.High">
+            <summary>
+            Gets or sets the values (in physical units) corresponding to high level of a calibration
+            pulse. 
+            <remarks>
+            If the signal is AC-coupled, low is zero, and high is the pulse amplitude.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.CalibrationInfo.CalibrationType">
+            <summary>
+            Gets or sets a value that specifies the shape of the calibration pulse.
+            <remarks>
+            Type is even if signals of the corresponding <see cref="P:WfdbCsharpWrapper.CalibrationInfo.SignalType"/> 
+            are AC-coupled, and odd if they are DC-coupled.
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:WfdbCsharpWrapper.CalibrationInfo.GetCalibration(System.String,System.String)">
+            <summary>
+            This function attempts to find calibration data for signals of type description, having physical
+            units as given by units. 
+            </summary>
+            <param name="description">signal's description</param>
+            <param name="units">physical units</param>
+            <returns>
+            If successful, it fills in the contents of the CalibrationInfo structure.
+            </returns>
+            <remarks>
+            Caller must not modify the contents of the strings addressed by the <see cref="P:WfdbCsharpWrapper.CalibrationInfo.SignalType"/> and <see cref="P:WfdbCsharpWrapper.CalibrationInfo.Units"/> fields of the CalibrationInfo structure
+            after GetCalibration returns. GetCalibration returns data from the first entry in the calibration list that
+            contains a <see cref="P:WfdbCsharpWrapper.CalibrationInfo.SignalType"/> field that is either an exact match or a prefix of description, and a <see cref="P:WfdbCsharpWrapper.CalibrationInfo.Units"/>
+            field that is an exact match of units; if either description or units is NULL, however, it is ignored
+            for the purpose of finding a match. GetCalibration cannot succeed unless the calibration list has
+            been initialized by a previous invocation of <see cref="!:Open"/> or <see cref="M:WfdbCsharpWrapper.CalibrationInfo.PutCalibration(WfdbCsharpWrapper.CalibrationInfo)"/>. 
+            (This function was first introduced in WFDB library version 6.0.)
+            </remarks>
+        </member>
+        <member name="M:WfdbCsharpWrapper.CalibrationInfo.PutCalibration(WfdbCsharpWrapper.CalibrationInfo)">
+            <summary>
+            This function adds the given CalibrationInfo structure pointed to by the argument to the end of the calibration
+            list.
+            </summary>
+            <remarks>
+            This function was first introduced in WFDB library version 6.0.
+            </remarks>
+            <param name="calibration">The calibration data to put in the calibration list.</param>
+            <returns>A value indicating whether or not the operation was successful.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.CalibrationInfo.FlushCalibrationList">
+            <summary>
+            Discards the current calibration list and returns the memory that it occupied to the heap. 
+            </summary>
+            <remarks>
+            Note that <see cref="M:WfdbCsharpWrapper.Wfdb.Quit"/> does not perform the function of FlushCalibrationList. 
+            This function was first introduced in WFDB library version 6.0.
+            </remarks>
+        </member>
+        <member name="T:WfdbCsharpWrapper.CalibrationType">
+            <summary>
+            Holds the supported values for the <see cref="T:WfdbCsharpWrapper.CalibrationType"/> Property
+            <remarks>
+            <see cref="F:WfdbCsharpWrapper.CalibrationType.AcCoupled"/> and <see cref="F:WfdbCsharpWrapper.CalibrationType.DcCoupled"/> are used in combination with the pulse
+            shape definitions in this enumeration to characterize calibration pulses.
+            </remarks>
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.CalibrationType.AcCoupled">
+            <summary>
+            AC coupled signal
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.CalibrationType.DcCoupled">
+            <summary>
+            DC coupled signal
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.CalibrationType.CalSquare">
+            <summary>
+            Square wave pulse
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.CalibrationType.CalSine">
+            <summary>
+            Sine wave pulse
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.CalibrationType.CalSawtooth">
+            <summary>
+            Sawtooth pulse
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.CalibrationType.CalUndef">
+            <summary>
+            Undefined pulse shape
+            </summary>
+        </member>
+        <member name="T:WfdbCsharpWrapper.Date">
+            <summary>
+            A signed integer type (at least 32 bits) used to represent Julian dates, in units
+            of days.
+            </summary>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Date.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance from <see cref="T:WfdbCsharpWrapper.Date"/>
+            </summary>
+            <param name="value">The value of the created instance.</param>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Date.ToString">
+            <summary>
+            Returns a string that represents the current date in the DD/MM/YYYY format.
+            </summary>
+            <remarks>
+            This method calls the <see cref="M:WfdbCsharpWrapper.PInvoke.datstr(System.Int32)"/> native function to perform this task.
+            </remarks>
+            <returns>A string that represents the current time object in the DD/MM/YYYY Format</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Date.Parse(System.String)">
+            <summary>
+            Converts string into a Julian date
+            </summary>
+            <param name="date">A string in DD/MM/YYYY Format.</param>
+            <remarks>
+            This method calls the datstr native function to perform this task.
+            </remarks>
+            <returns>An equivalent Date object.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Date.ToDateTime">
+            <summary>
+            Converts the current date object to the .NET Framework BCL Type <see cref="T:System.DateTime"/>
+            </summary>
+            <returns>A <see cref="T:System.DateTime"/> instance representing this object.</returns>
+        </member>
+        <member name="T:WfdbCsharpWrapper.Frequency">
+            <summary>
+            A floating point type used to represent sampling and counter frequencies, in
+            units of Hz.
+            </summary>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Frequency.GetFrequency(System.String)">
+            <summary>
+            Gets the sampling frequency of the specified record.
+            </summary>
+            <param name="record">The record name.</param>
+            <returns>The sampling frequency associated with the specified record.</returns>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Frequency.InputFrequency">
+            <summary>
+            Gets or sets the current input sampling frequency (in samples per second per signal)
+            </summary>
+            <remarks>
+            The current input sampling frequency is either the raw sampling frequency for 
+            the current record or a frequency chosen for this property.
+            </remarks>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Frequency.SetSamplingFrequency(WfdbCsharpWrapper.Frequency)">
+            <summary>
+            Sets the sampling frequency used by time conversion functions.
+            </summary>
+            <remarks>
+            Use SetSamplingFrequency before creating a new .hea file.
+            </remarks>
+            <param name="freq"></param>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Frequency.OutputAnnotationFrequency">
+            <summary>
+            Gets or sets the current wfdb's output annotation frequency.
+            </summary>
+        </member>
+        <member name="T:WfdbCsharpWrapper.Gain">
+            <summary>
+            A floating point type used to represent signal gains, in units of adus per physical
+            unit.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Gain.DefaultGain">
+            <summary>
+            Default value for gain.
+            </summary>
+        </member>
+        <member name="T:WfdbCsharpWrapper.Group">
+            <summary>
+            An unsigned integer type used to represent signal group numbers.
+            </summary>
+        </member>
+        <member name="T:WfdbCsharpWrapper.GVMode">
+            <summary>
+            Represents valid modes for <see cref="M:WfdbCsharpWrapper.PInvoke.getvec(WfdbCsharpWrapper.Sample[])"/> when reading a multi-frequency record.
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.GVMode.LowRes">
+            <summary>
+            Low Resolution.
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.GVMode.HighRes">
+            <summary>
+            High Resolution.
+            </summary>
+        </member>
+        <member name="T:WfdbCsharpWrapper.Record">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Record.Name">
+            <summary>
+            Gets the name of the record.
+            </summary>
+            <remarks>
+            You may qualify the name with the full/relative path on the hard disk. 
+            </remarks>
+        </member>
+        <member name="F:WfdbCsharpWrapper.Record.signals">
+            <summary>
+            Gets the signals available in this record.
+            You should call <seealso cref="M:WfdbCsharpWrapper.Record.Open"/> before using this member.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Record.Signals">
+            <summary>
+            Gets the signals associated with this record.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Record.Info">
+            <summary>
+            Gets or sets the info associated with this record.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Record.IsNew">
+            <summary>
+            Gets a Boolean value indicating whether this record is new or not.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Record.SamplingFrequency">
+            <summary>
+            Gets or sets the sampling frequency for this record.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Record.Item(System.Int32)">
+            <summary>
+            Returns the signal at the specified index.
+            </summary>
+            <param name="i">Signal's index</param>
+            <returns>Signal object at the specified index.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Record.GetSamples(System.Int32)">
+            <summary>
+            Returns the specified number of available samples from the available signals at the same time.
+            </summary>
+            <param name="numberOfSamples">Number of samples to be returned</param>
+            <returns>A list of sample vectors where each entry holds the a vector containing the samples available at the current pointer in each signal.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Record.Seek(WfdbCsharpWrapper.Time)">
+            <summary>
+            Resets the signal input file pointers so that the next samples returned by <see cref="M:WfdbCsharpWrapper.Signal.ReadNext(System.Int32)"/> and <see cref="M:WfdbCsharpWrapper.Record.GetSamples(System.Int32)"/> 
+            </summary>
+            <param name="t">The new pointer position.</param>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Record.SetGroupTime(System.Int32,WfdbCsharpWrapper.Time)">
+            <summary>
+            Sets the current time (pointer) for the specified group.
+            </summary>
+            <param name="group">The group's number</param>
+            <param name="t">The new time.</param>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Record.Open">
+            <summary>
+            Opens the current record and fetches its information from the hard disk.
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.Record.MaxRecordNameLength">
+            <summary>
+            Gets the maximum allowed length of record name.
+            </summary>
+        </member>
+        <member name="T:WfdbCsharpWrapper.Sample">
+            <summary>
+            A signed integer type used to represent sample values, in units
+            of adus.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Sample.Adu">
+            <summary>
+            Gets the integer value of this sample.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Sample.SignalNumber">
+            <summary>
+            Gets the Signal Number of the Current sample.
+            </summary>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Sample.ToSample(WfdbCsharpWrapper.Signal,System.Double)">
+            <summary>
+            Converts the specified physio unit to adus. 
+            </summary>
+            <param name="signal">The signal object associated with the resulted sample.</param>
+            <param name="physUnit">The physiological unit.</param>
+            <returns>Sample object holding a reference for the converted value.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Sample.ToSample(WfdbCsharpWrapper.Signal,System.Int32)">
+            <summary>
+            Converts the specified microvolts unit to adus. 
+            </summary>
+            <param name="signal">The signal object associated with the resulted sample.</param>
+            <param name="microvolts">The microvolts unit.</param>
+            <returns>Sample object holding a reference for the converted value.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Sample.ToPhys">
+            <summary>
+            Converts the current adus unit to physiological unit.
+            </summary>
+            <returns>Returns the corresponding physiological unit.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Sample.ToMicrovolts">
+            <summary>
+            Converts the current adus unit to microvolts.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Sample.GetSamples(WfdbCsharpWrapper.Signal)">
+            <summary>
+            Returns all available samples in the specified signal.
+            </summary>
+            <param name="signal">Source Signal.</param>
+            <returns>A list containing all available samples.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Sample.GetSamples(System.Int32,System.Int32)">
+            <summary>
+            Returns the specified number of samples from the available signals at the same time.
+            </summary>
+            <param name="numberOfSamples">Number of samples to be read.</param>
+            <param name="signalsCount">Number of available signal in the current record.</param>
+            <returns>A list of sample vectors where each entry holds an array containing the available samples at the current pointer in each signal.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Sample.GetSamples(WfdbCsharpWrapper.Signal,System.Int32)">
+            <summary>
+            Returns the specified number of samples from the specified signal.
+            </summary>
+            <param name="signal">Source Signal.</param>
+            <param name="numberOfSamples">Number of samples to read.</param>
+            <returns>A list containing <paramref name="numberOfSamples"/> samples.</returns>
+        </member>
+        <member name="F:WfdbCsharpWrapper.Sample.InvalidSampleAduValue">
+            <summary>
+            Samples from getvec or getframe with this value are not valid.
+            </summary>
+        </member>
+        <member name="T:WfdbCsharpWrapper.Signal">
+            <summary>
+            Holds the name and global attributes of a given signal.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.FileName">
+            <summary>
+            Name of the file in which samples of the associated signal are stored.
+            <remarks>
+            Input signal files are found by prefixing FileName with
+            each of the components of the database path in turn.
+            FileName may include relative or absolute path specifications
+            if necessary; the use of an absolute pathname, combined with an initial null
+            component in WFDB, reduces the time needed to find the signal file to a minimum.
+            If FileName is ‘-’, it refers to the standard input or output.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.Description">
+            <summary>
+            Signal's description text.
+            <remarks>
+            This is a string without embedded newlines (e.g., ‘ECG lead V1’ or ‘trans-thoracic impedance’). 
+            The length of the description string is restricted to a maximum of <see cref="F:WfdbCsharpWrapper.Signal.MaxDescriptionLength"/> characters,
+            not including the null.
+            This field is used internally by the wrapper implementation to fetch the current signal's <see cref="P:WfdbCsharpWrapper.Signal.Number"/>. If two or more signals share the same description, 
+            the first signal in the record gets returned whenever the description string is provided.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.Units">
+            <summary>
+            Specifies the physical units of the signal; if null, the units are assumed to
+            be millivolts (mV unless otherwise specified).
+            <remarks>
+            The length of the units string is restricted to a maximum of
+            <see cref="F:WfdbCsharpWrapper.Signal.MaxUnitsLength"/> characters (not including the null).
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.Gain">
+            <summary>
+            The number of analog-to-digital converter units (adus) per physical unit (<see cref="P:WfdbCsharpWrapper.Signal.Units"/>)
+            relative to the original analog signal; for an ECG, this is roughly
+            equal to the amplitude of a normal QRS complex. If gain is zero, no amplitude
+            calibration is available; in this case, a gain of <see cref="P:WfdbCsharpWrapper.Gain.DefaultGain"/>
+            may be assumed.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.InitValue">
+            <summary>
+            The initial value of the associated signal (i.e., the value of sample number 0).
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.Group">
+            <summary>
+            The signal group number. All signals in a given group are stored in the same file.
+            If there are two or more signals in a group, the file is called a multiplexed signal
+            file. Group numbers begin at 0; arrays of Signal are always
+            kept ordered with respect to the group number, so that signals belonging to the
+            same group are described by consecutive entries in the array.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.Format">
+            <summary>
+            The signal storage format. 
+            <remarks>
+            The most commonly-used formats are format 8 (8-bit
+            first differences), format 16 (16-bit amplitudes), and format 212 (pairs of 12-bit
+            amplitudes bit-packed into byte triplets). See <see cref="T:WfdbCsharpWrapper.SignalStorageFormat"/> enumeration for a complete
+            list of supported formats.
+            All signals belonging to the same group must be
+            stored in the same format.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.SamplesPerFrame">
+            <summary>
+            The number of samples per frame. This is 1, for all except oversampled signals
+            in multi-frequency records, for which spf may be any positive integer.
+            <remarks>
+            Note that non-integer values are not permitted (thus the frame rate must be chosen
+            such that all sampling frequencies used in the record are integer multiples of
+            the frame rate).
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.BlockSize">
+            <summary>
+            The block size, in bytes.
+            <remarks>
+            For signal files that reside on Unix character device
+            special files (or their equivalents), the BlockSize field indicates how many bytes
+            must be read or written at a time. For ordinary disk files, BlockSize is zero. 
+            All signals belonging to a given group have the same BlockSize.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.AdcResolution">
+            <summary>
+            The ADC resolution in bits.
+            <remarks>
+            Typical ADCs have resolutions between 8 and 16
+            bits inclusive.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.AdcZero">
+            <summary>
+            The ADC output given an input that falls exactly at the center of the ADC
+            range (normally 0 VDC).
+            <remarks>
+            Bipolar ADCs produce two’s complement output; for
+            these, AdcZero is usually zero. For the MIT DB, however, an offset binary
+            ADC was used, and AdcZero was 1024.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.Baseline">
+            <summary>
+            The value of ADC output that would map to 0 physical units input.
+            <remarks>
+            The value of AdcZero is not synonymous with that of Baseline (the isoelectric or physical
+            zero level of the signal); the Baseline is a characteristic of the signal, while
+            AdcZero is a characteristic of the digitizer. The value of baseline need not
+            necessarily lie within the output range of the ADC; for example, if the units
+            are ‘degrees_Kelvin’, and the ADC range is 200–300 degrees Kelvin, baseline
+            corresponds to absolute zero, and lies well outside the range of values actually
+            produced by the ADC.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.NumberOfSamples">
+            <summary>
+            The number of samples in the signal. (Exception: in multi-frequency records,
+            NumberOfSamples is the number of samples divided by SamplesPerFrame, see above, i.e., the number of
+            frames.).
+            <remarks>
+            All signals in a given record must have the same NumberOfSamples. If NumberOfSamples is
+            zero, the number of samples is unspecified, and the cksum 
+            is not used; this is useful for specifying signals that are obtained from pipes,
+            for which the length may not be known.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.CheckSum">
+            <summary>
+            A 16-bit checksum of all samples. This field is not usually accessed by application
+            programs; newheader records checksums calculated by <see cref="M:WfdbCsharpWrapper.PInvoke.putvec(System.Int32)"/> when it creates a
+            new ‘hea’ file, and getvec compares checksums that it calculates against cksum
+            at the end of the record, provided that the entire record was read through
+            without skipping samples.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.Number">
+            <summary>
+            Gets the signal number.
+            </summary>
+            <remarks>
+            The current wrapper implementation uses the signal's description to recover the underlying number since it's the only available method to find it (<see cref="M:WfdbCsharpWrapper.PInvoke.findsig(System.String)"/>).
+            This implies that the property getter would potentially fail in case two or more signals share the same description.
+            </remarks>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.Record">
+            <summary>
+            Gets the record to which this signal belongs.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.Skew">
+            <summary>
+            Gets or sets the intersignal's skew.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Signal.CurrentTime">
+            <summary>
+            Returns the current reading pointer's position.
+            </summary>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Signal.Seek(WfdbCsharpWrapper.Time)">
+            <summary>
+            Moves the reading pointer to the specified position.
+            </summary>
+            <remarks>
+            WFDB lib implements a single global pointer for all available signals in the current record at the same time.
+            The current wrapper implementation however uses a backing field to keep track of the last position for each signal independently.
+            This helps when reading data from each signal independently by keeping the state of the record's pointer for each signal independently.
+            Although it allows the calling code to manipulate each signal's data in isolation, the current implementation will only work in a singlethreaded context.
+            Concurrent access might result in an unpredictable behaviour.
+            </remarks>
+            <param name="t">The new pointer position.</param>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Signal.ReadNext(WfdbCsharpWrapper.Time)">
+            <summary>
+            Returns the available sample at the specified position.
+            </summary>
+            <param name="t">Position of the sample to be read.</param>
+            <returns>The available sample at the specified position.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Signal.ReadNext(WfdbCsharpWrapper.Time,System.Int32)">
+            <summary>
+            Returns the specified number of samples starting from the specified position.
+            </summary>
+            <param name="from">Reading position.</param>
+            <param name="count">Number of samples to be read.</param>
+            <returns>A list containing the available samples starting for the specified position.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Signal.ReadNext">
+            <summary>
+            Returns the Sample at the next pointer location.
+            </summary>
+            <returns>Sample at the next pointer location.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Signal.ReadNext(System.Int32)">
+            <summary>
+            Returns a list containing the specified number of samples available starting from the current pointer location.
+            </summary>
+            <param name="count">Number of samples you want to read.</param>
+            <returns>A list containing the available samples starting for the current pointer location.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Signal.ReadToEnd">
+            <summary>
+            Returns the available samples from the current position to the end of the signal.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Signal.ReadAll">
+            <summary>
+            Gets the list of all available samples in the current signal
+            </summary>
+            <returns>A list containing all the available samples.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Signal.GetSignals(System.String)">
+            <summary>
+            Gets the available signals in the specified record.
+            </summary>
+            <param name="record">The name of the record to be opened.</param>
+            <returns>A list containing the signals of the specified record.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Signal.GetSignals(WfdbCsharpWrapper.Record)">
+            <summary>
+            Returns a list containing the available signals in the specified record.
+            </summary>
+            <param name="record">Record to be read.</param>
+            <returns>List of available signals in the specified record.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Signal.GetSignalsCount(System.String)">
+            <summary>
+            Gets the number of available signals in the specified record.
+            </summary>
+            <param name="record">The name of the record to be read.</param>
+            <returns>The number of available signals.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Signal.GetRecord(WfdbCsharpWrapper.Signal)">
+            <summary>
+            Returns the record associated with the specified signal. For internal use only.
+            </summary>
+            <param name="signal">Signal's reference.</param>
+            <returns>The record instance associated with the specified signal.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Signal.GetCurrentTime(WfdbCsharpWrapper.Signal)">
+            <summary>
+            Returns the current pointer's position for the specified signal.
+            </summary>
+            <param name="signal"></param>
+            <returns></returns>
+        </member>
+        <member name="F:WfdbCsharpWrapper.Signal.MaxDescriptionLength">
+            <summary>
+            Maximum allowed characters length of <see cref="P:WfdbCsharpWrapper.Signal.Description"/>
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.Signal.MaxUnitsLength">
+            <summary>
+            Maximum allowed characters length of <see cref="P:WfdbCsharpWrapper.Signal.Units"/>
+            </summary>
+        </member>
+        <member name="T:WfdbCsharpWrapper.SignalStorageFormat">
+            <summary>
+            Legal values for the <see cref="P:WfdbCsharpWrapper.Signal.Format"/> member.
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.SignalStorageFormat.NullSignal">
+            <summary>
+            Null signal (nothing read or written)
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.SignalStorageFormat.Sf8Bit">
+            <summary>
+            8-bit first differences
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.SignalStorageFormat.Sf16Bit">
+            <summary>
+            16-bit 2's complement amplitudes, low byte first
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.SignalStorageFormat.Sf61Bit">
+            <summary>
+            16-bit 2's complement amplitudes, high byte first
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.SignalStorageFormat.Sf80Bit">
+            <summary>
+            8-bit offset binary amplitudes
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.SignalStorageFormat.Sf160Bit">
+            <summary>
+            16-bit offset binary amplitudes
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.SignalStorageFormat.Sf212Bit">
+            <summary>
+            2 12-bit amplitudes bit-packed in 3 bytes
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.SignalStorageFormat.Sf310Bit">
+            <summary>
+            3 10-bit amplitudes bit-packed in 4 bytes
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.SignalStorageFormat.Sf311Bit">
+            <summary>
+            3 10-bit amplitudes bit-packed in 4 bytes
+            </summary>
+        </member>
+        <member name="T:WfdbCsharpWrapper.Stat">
+            <summary>
+            Represents values for the <see cref="P:WfdbCsharpWrapper.Annotator.Stat"/> member.
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.Stat.Read">
+            <summary>
+            Standard input annotation file.
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.Stat.Write">
+            <summary>
+            Standard output annotation file.
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.Stat.AhaRead">
+            <summary>
+            AHA-format input annotation file.
+            </summary>
+        </member>
+        <member name="F:WfdbCsharpWrapper.Stat.AhaWrite">
+            <summary>
+            AHA-format output annotation file .
+            </summary>
+        </member>
+        <member name="T:WfdbCsharpWrapper.Time">
+            <summary>
+            A signed integer type (at least 32 bits) used to represent times and time intervals,
+            in units of sample intervals. Only the magnitude is significant; the sign of a
+            Time variable indicates how it is to be printed by ToString() or mstimstr.
+            </summary>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Time.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance from <see cref="T:WfdbCsharpWrapper.Time"/>
+            </summary>
+            <param name="value">The value of the created instance.</param>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Time.ToString">
+            <summary>
+            Returns a string representing the current time in the HH:MM:SS format.
+            </summary>
+            <remarks>
+            This method calls the <see cref="M:WfdbCsharpWrapper.PInvoke.timstr(System.Int64)"/> native function to perform the underlying conversion task.
+            </remarks>
+            <returns>A string that represenets the current time object in the HH:MM:SS format.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Time.ToMSString">
+            <summary>
+            Returns a string that represents the current time in the HH:MM:SS.SSS format.
+            </summary>
+            <remarks>
+            This method calls the mstimstr native function to perform this task.
+            </remarks>
+            <returns>A string that represenets the current time object in the HH:MM:SS.SSS format.</returns>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Time.Parse(System.String)">
+            <summary>
+            Converts a string in standard time format to a valid <see cref="T:WfdbCsharpWrapper.Time"/> object.
+            </summary>
+            <param name="time">A string in the HH:MM:SS.SSS Format.</param>
+            <returns>
+            A valid time object.
+            </returns>
+            <remarks>
+            The returned value is either
+            - A positive value: number of sample intervals corresponding to the argument interpreted as a time interval.
+            - A negative value: (negated) elapsed time in sample intervals from the beginning of the record,
+            corresponding to the argument interpreted as a time of day.
+            - Zero 0 : a legal return if the argument matches the base time; otherwise an error return
+            indicating an incorrectly formatted argument.
+            </remarks>
+            <example>
+            2:14.875 2 minutes + 14.875 seconds
+            [13:6:0] 13:06 (1:06 PM)
+            [8:0:0 1] 8 AM on the day following the base date
+            [12:0:0 1/3/1992] noon on 1 March 1992
+            143 143 seconds (2 minutes + 23 seconds)
+            4:02:01 4 hours + 2 minutes + 1 second
+            s12345 12345 sample intervals
+            c350.5 counter value 350.5
+            e time of the end of the record (if defined)
+            i time of the next sample in input signal 0
+            o (the letter ‘o’) time of the next sample in output signal 0
+            </example>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Time.ToTimeSpan">
+            <summary>
+            Converts the current time object to the .NET Framework BCL Type <see cref="T:System.TimeSpan"/>
+            </summary>
+            <returns>A <see cref="T:System.TimeSpan"/> instance that represents this object.</returns>
+        </member>
+        <member name="F:WfdbCsharpWrapper.Time.Zero">
+            <summary>
+            Const representing the T0 of a Signal.
+            </summary>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Time.SetBaseTime(WfdbCsharpWrapper.Time)">
+            <summary>
+            Sets the base time used by time-conversion functions.
+            </summary>
+            <param name="time">The base time.</param>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Time.SetBaseTime(System.String)">
+            <summary>
+            Sets the base time used by time-conversion functions.
+            </summary>
+            <param name="time">The base time in this format hh:MM:ss.</param>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Wfdb.Quit">
+            <summary>
+            Closes all open WFDB files and frees any memory allocated by other WFDB
+            library functions.
+            </summary>
+            <remarks>
+            This method also resets the following:
+            - The factors used for converting between samples, seconds, and counter values (reset to
+            1), the base time (reset to 0, i.e., midnight), and the base counter value (reset to 0).
+            - The parameters used for converting between adus and physical units.
+            - Internal variables used to determine output signal specifications.
+            </remarks>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Wfdb.EnableErrorReporting">
+            <summary>
+            Enable Verbose Mode.
+            </summary>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Wfdb.DisableErrorReporting">
+            <summary>
+            Disable Verbose Mode.
+            </summary>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Wfdb.Flush">
+            <summary>
+            Write pending changes to hard disk.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Wfdb.Version">
+            <summary>
+            Gets the version of invoked WFDB library.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Wfdb.WfdbPath">
+            <summary>
+            Gets or sets the value of the WFDB environment variable.
+            <remarks>
+            The string contains a list of locations where input files may be found. These
+            locations may be absolute directory names (such as ‘/usr/local/database’ under Unix,
+            or ‘d:/database’ under MS-DOS), relative directory names (e.g., ../mydata), or URL prefixes
+            (e.g., ‘http://www.physionet.org/physiobank/database’).
+            
+            If NETFILES support is unavailable, any URL prefixes in the string are ignored. The special form ‘.’ refers to
+            the current directory. Entries in the list may be separated by whitespace or by semicolons;
+            under Unix, colons may also be used as separators. An empty component, indicated by an
+            initial or terminal separator, or by two consecutive separators, will be understood to specify
+            the current directory (which may also be indicated by a component consisting of a single
+            ‘.’). If the string is empty or NULL, the database path is limited to the current directory.
+            
+            If string begins with ‘@’, the remaining characters of string are taken as the name of a file
+            from which the WFDB path is to be read. This file may contain either the WFDB path, as
+            described in the previous paragraph, or another indirect WFDB path specification. Indirect
+            WFDB path specifications may be nested no more than ten levels deep (an arbitrary limit
+            imposed to avoid infinite recursion). Evaluation of indirect WFDB paths is deferred until
+            getwfdb is invoked, either explicitly or by the WFDB library while attempting to open
+            an input file (e.g., using annopen or isigopen). (The features described in this paragraph
+            were first introduced in WFDB library version 8.0.) See [getwfdb], page 59 for an example
+            of the use of setwfdb.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Wfdb.WfdbCal">
+            <summary>
+            Gets the value of the WFDBCAL environment variable.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Wfdb.SamplesPerFrame">
+            <summary>
+            Gets the current Samples Per Frame Rate.
+            </summary>
+        </member>
+        <member name="P:WfdbCsharpWrapper.Wfdb.LastErrorMessage">
+            <summary>
+            Returns a string containing the most recent WFDB error message.
+            </summary>
+        </member>
+        <member name="M:WfdbCsharpWrapper.Wfdb.SetGVMode(WfdbCsharpWrapper.GVMode)">
+            <summary>
+            Sets the current GV mode.
+            </summary>
+            <param name="mode">new GV mode.</param>
+        </member>
+    </members>
+</doc>

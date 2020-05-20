@@ -1,0 +1,60 @@
+{
+  "WorkItem": {
+    "AffectedComponent": {
+      "Name": "",
+      "DisplayName": ""
+    },
+    "ClosedComment": "Not an issue in the first place",
+    "ClosedDate": "2016-02-29T21:18:47.763-08:00",
+    "CommentCount": 0,
+    "Custom": null,
+    "Description": "This solution doesn't work on windows 8 x64. I'm not sure why, but I think the problem is the wfdb.dll file in package folder or WfdbCsharpLib.dll in Binary folder.\n\nI don't know how to make the native windows 8 version of the necessary files, and integrate them into the project.\n\ncan someone help me?",
+    "LastUpdatedDate": "2016-02-29T21:18:47.763-08:00",
+    "PlannedForRelease": "",
+    "ReleaseVisibleToPublic": false,
+    "Priority": {
+      "Name": "Unassigned",
+      "Severity": 0,
+      "Id": 0
+    },
+    "ProjectName": "wfdbcsharpwrapper",
+    "ReportedDate": "2016-02-25T12:41:24.5-08:00",
+    "Status": {
+      "Name": "Closed",
+      "Id": 4
+    },
+    "ReasonClosed": {
+      "Name": "Fixed"
+    },
+    "Summary": "HELP-> dll's for windows 8",
+    "Type": {
+      "Name": "Unassigned",
+      "Id": 5
+    },
+    "VoteCount": 1,
+    "Id": 22182
+  },
+  "FileAttachments": [],
+  "Comments": [
+    {
+      "Message": "Hi,\nThanks for your feedback.\r\n\r\nThe library was tested under windows 8/8.1/10 both 32 and 64 platforms and it works fine. The native wfdb dll file being wrapped was however built targeting the 32bit platform. You just need to make sure that the target platform of the wrapper solution is x86 in Visual Studio's configuration manager. This would allow the build engine to produce a standard PE32/x86 executable which the OS can correctly load along with the CLR in a WoW64 address space.\r\n\r\nLet me know if this helps,\nRegards,\nOualid",
+      "PostedDate": "2016-02-25T13:09:43.627-08:00",
+      "Id": -2147483648
+    },
+    {
+      "Message": "thank you Oualid, the solution is working now.\r\n\r\njust a summary for everyone. you just need to do the follow steps:\r\n\r\n-------------------------------------------------------\n.Solution 'wfdbcshapwrapper'(3 projects)\n\t.Configuration Manager\n\t\t.active solution platform\n\t\t\t.x86\n-------------------------------------------------------\r\n\r\nWith the best regards, c. Augusto",
+      "PostedDate": "2016-02-25T14:03:49.013-08:00",
+      "Id": -2147483648
+    },
+    {
+      "Message": "thank you Oualid, the solution is working now.\r\n\r\njust a summary for everyone. you just need to do the follow steps:\r\n\r\n\n.Solution 'wfdbcshapwrapper'(3 projects)\n.Configuration Manager\n.active solution platform\n.x86\r\n\r\n\nWith the best regards, c. Augusto",
+      "PostedDate": "2016-02-25T14:05:47.583-08:00",
+      "Id": -2147483648
+    },
+    {
+      "Message": "",
+      "PostedDate": "2016-02-29T21:18:47.763-08:00",
+      "Id": -2147483648
+    }
+  ]
+}

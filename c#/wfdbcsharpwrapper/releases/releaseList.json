@@ -1,0 +1,19 @@
+[
+  {
+    "Id": "0",
+    "Name": "WfdbCsharpLib Source Code",
+    "DevelopmentStatus": "Beta",
+    "Description": "The annotator generation and calibration features of the native library have not been integrated in the Wrapper Classes, however you can still use the PInvoke class which offers all the required native functions to implement those features.",
+    "ReleasedDatge": "0001-01-01T00:00:00",
+    "ModifiedDate": "2013-01-01T06:31:51.72-08:00",
+    "Files": [
+      {
+        "Id": "803fc1fc-5a7b-4464-961d-0c947b904046",
+        "FileName": "Source Code and Binary Bundle.zip",
+        "Url": "./0/803fc1fc-5a7b-4464-961d-0c947b904046",
+        "Type": "Application",
+        "UploadDate": "2013-01-01T06:31:51.42-08:00"
+      }
+    ]
+  }
+]
