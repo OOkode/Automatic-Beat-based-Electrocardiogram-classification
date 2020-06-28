@@ -7,6 +7,7 @@ from scipy.ndimage import median_filter
 from scipy.signal import firwin,convolve
 from wfdb import processing
 from ecgdetectors import Detectors
+import json, csv
 
 NON_USEFUL_ANNOTATIONS = ['~','|','+','Q']
 
@@ -86,71 +87,120 @@ def fill_RR_suma_acumulada(r_peaks,suma_acumulada):
 
 
 ### loading wfdb record ##
+classified_csv_beats_file = open(f'data.csv', newline='', mode='w')
+writer = csv.writer(classified_csv_beats_file,dialect='excel')
 
 for filename in os.listdir('D:\\Desarrollo\\databases\\MIT-BIH\\'):
-    print(filename)
 
-wfdb_record = wfdb.rdrecord('D:\\Desarrollo\\databases\\MIT-BIH\\109',channels=[0])
-wfdb_annotation = wfdb.rdann('D:\\Desarrollo\\databases\\MIT-BIH\\109', 'atr')
+    if(filename.endswith('.hea') or filename.endswith('.atr') or filename.endswith('.xws')):
+        continue
+    else:
 
-record_p_signal = wfdb_record.p_signal
-signal_frecuency = wfdb_record.fs
+        filename = filename.split(sep='.')
+        #filename = ('108','lol')
+        wfdb_record = wfdb.rdrecord(f'D:\\Desarrollo\\databases\\MIT-BIH\\{filename[0]}',channels=[0])
+        wfdb_annotation = wfdb.rdann(f'D:\\Desarrollo\\databases\\MIT-BIH\\{filename[0]}', 'atr')
 
-record_p_signal = [sample[0] for sample in record_p_signal] #downgrading wfdb record to a simple float array
+        record_p_signal = wfdb_record.p_signal
+        signal_frecuency = wfdb_record.fs
 
-### loading wfdb record ##
+        record_p_signal = [sample[0] for sample in record_p_signal] #downgrading wfdb record to a simple float array
 
-
-
-### filtering signal ###
-filtered_signal = np.array(record_p_signal)
-#filtered_signal = remove_baseline_wander(record_p_signal)
-#filtered_signal = remove_powerline_interference(filtered_signal)
-
-### filtering signal ###
+        ### loading wfdb record ##
 
 
 
-### detecting Beat features ###
-qrs_detector = Detectors(signal_frecuency)
+        ### filtering signal ###
+        filtered_signal = np.array(record_p_signal)
+        #filtered_signal = remove_baseline_wander(record_p_signal)
+        #filtered_signal = remove_powerline_interference(filtered_signal)
 
-#r_peaks = qrs_detector.pan_tompkins_detector(filtered_signal)
-#r_peaks = qrs_detector.engzee_detector(filtered_signal)
-#r_peaks =qrs_detector.two_average_detector(filtered_signal)
-r_peaks = wfdb.processing.xqrs_detect(sig=filtered_signal,fs=signal_frecuency)
+        ### filtering signal ###
 
-#fifth_minute_r_peak = find_r_peak_index(r_peaks,108000,250,400)
 
-#qrs_sections = get_qrs_sections(r_peaks[fifth_minute_r_peak:],filtered_signal)
 
-#r_peak_counter = fifth_minute_r_peak # first after 5 minutes
-suma_acumulada =  []
-fill_RR_suma_acumulada(r_peaks,suma_acumulada)
+        ### detecting Beat features ###
+        qrs_detector = Detectors(signal_frecuency)
 
-i = 7
-end = len(r_peaks) - 1
-GLOBAL_RR_AVERAGE = int(suma_acumulada[-1]/len(suma_acumulada))
-beats = []
-#( filtered_signal[wfdb_annotation.sample[k]] < 0.13 and filtered_signal[wfdb_annotation.sample[k]] > 0 )
-with open("r_peaks vs samples.txt",'w') as f:
-    j,k = 0,0
-    peak_amount = len(wfdb_annotation.sample) if len(wfdb_annotation.sample) < len(r_peaks) else len(r_peaks)
-    while j < peak_amount-2:
+        #r_peaks = qrs_detector.pan_tompkins_detector(filtered_signal)
+        #r_peaks = qrs_detector.engzee_detector(filtered_signal)
+        #r_peaks =qrs_detector.two_average_detector(filtered_signal)
+        r_peaks = wfdb.processing.xqrs_detect(sig=filtered_signal,fs=signal_frecuency)
 
-        if wfdb_annotation.symbol[k] in NON_USEFUL_ANNOTATIONS :
-            k += 1
-            continue
-        if abs(r_peaks[j] - wfdb_annotation.sample[k]) > 26:
-            j += 1
-            k += 1
-            continue
-        #print(str(r_peaks[j]) + " " + str(wfdb_annotation.sample[j]),file=f)
-        print(str(abs(r_peaks[j] - wfdb_annotation.sample[k])) + " j=" + str(j) + 
-        " " + str(r_peaks[j]) + " " + str(wfdb_annotation.sample[k]) + " " + wfdb_annotation.symbol[k],file=f)
-        j +=1
-        k +=1
-print('done')
+        #fifth_minute_r_peak = find_r_peak_index(r_peaks,108000,250,400)
 
+        #qrs_sections = get_qrs_sections(r_peaks[fifth_minute_r_peak:],filtered_signal)
+
+        #r_peak_counter = fifth_minute_r_peak # first after 5 minutes
+        suma_acumulada =  []
+        fill_RR_suma_acumulada(r_peaks,suma_acumulada)
+
+        i = 7
+        end = len(r_peaks) - 1
+        GLOBAL_RR_AVERAGE = int(suma_acumulada[-1]/len(suma_acumulada))
+        beats = []
+
+
+
+        #( filtered_signal[wfdb_annotation.sample[k]] < 0.13 and filtered_signal[wfdb_annotation.sample[k]] > 0 )
+        with open(f"r_peaks vs samples {filename[0]}.txt",'w') as f:
+            j,k = 0,0
+            peak_amount = len(wfdb_annotation.sample) if len(wfdb_annotation.sample) < len(r_peaks) else len(r_peaks)
+
+            classified_beats = {
+                'id': str(wfdb_record.record_name),
+                'normal_beats': [],
+                'abnormal_beats': []
+
+            }
+
+
+
+            while j < peak_amount-2 and k < peak_amount:
+
+
+                # classified_beats_file = open(f'{filename[0]}.json','w')
+
+
+                if wfdb_annotation.symbol[k] in NON_USEFUL_ANNOTATIONS :
+                    k += 1
+                    continue
+
+                if abs(r_peaks[j] - wfdb_annotation.sample[k]) > 26:
+                    m = k
+                    while r_peaks[j] - wfdb_annotation.sample[m] > 0 and abs(r_peaks[j] - wfdb_annotation.sample[m]) > 26:
+                        m +=1
+                    if abs(r_peaks[j] - wfdb_annotation.sample[m]) > 26:
+                        j += 1
+                        #k += 1
+                        continue
+                    else:
+                        k=m
+
+                #print(str(r_peaks[j]) + " " + str(wfdb_annotation.sample[j]),file=f)
+                if wfdb_annotation.symbol[k] == 'N':
+                    classified_beats['normal_beats'].append(str(r_peaks[j]))
+                else:
+                    classified_beats['abnormal_beats'].append(str(r_peaks[j]))
+
+                # print(str(abs(r_peaks[j] - wfdb_annotation.sample[k])) + " j=" + str(j) +
+                # " " + str(r_peaks[j]) + " " + str(wfdb_annotation.sample[k]) + " " + wfdb_annotation.symbol[k],file=f)
+                j +=1
+                k +=1
+
+        # json.dump(classified_beats,classified_beats_file)
+        # classified_beats_file.close()
+
+
+        writer.writerow([classified_beats['id']
+                            ,2000 if len(classified_beats['normal_beats']) > 2000 else len(classified_beats['normal_beats'])
+                            ,len(classified_beats['abnormal_beats'])])
+
+        print(f'done, {filename[0]}')
+
+classified_csv_beats_file.close()
+
+print('preprocessing complete')
 ### detecting Beat features ###
 
 ### plotting ###
